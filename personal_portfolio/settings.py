@@ -75,17 +75,28 @@ WSGI_APPLICATION = 'personal_portfolio.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'test',
-        'USER': 'postgres',
-        'PASSWORD': '123123ps2',
-        'HOST': 'localhost',
-        'PORT': '5432',
+if 'DB_NAME' in os.environ:
+    DATABASES = {
+       'default': {
+             'ENGINE':'django.db.backends.postgresql_psycopg2',
+             'NAME': os.environ['DB_NAME'],
+             'USER': os.environ['USERNAME'],
+             'PASSWORD': os.environ['PASSWORD'],
+             'HOST': os.environ['HOSTNAME'],
+             'PORT': os.environ['PORT'],
+             }
     }
-}
-
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'test',
+            'USER': 'postgres',
+            'PASSWORD': '123123ps2',
+            'HOST' : 'localhost',
+            'PORT' : '5432',
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -123,4 +134,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, "..", "www", "static")
 STATIC_URL = '/static/'
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+
+#MEDIA FILE (user uploaded files)
+MEDIA_ROOT = os.path.join(BASE_DIR, "..", "www", "media")
+MEDIA_URL = '/media/'
